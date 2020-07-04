@@ -1,0 +1,38 @@
+原图
+I = imread('beauty.jpg');
+
+axes(handles.axes1);
+
+imshow(I);
+
+handles.img=I;
+
+guidata(hObject,handles);
+
+
+灰度图
+I= imread('beauty.jpg');
+
+J=rgb2gray(I);
+
+axes(handles.axes2);
+
+imshow(J);
+
+handles.img=J;
+
+guidate(hObject,handles);
+
+灰度直方图
+I = imread('beauty.jpg');
+
+J1=rgb2gray(I);
+
+axes(handles.axes3);
+
+imhist(J1);
+
+handles.img(J1);
+
+guidate(hObject,handles);
+

@@ -1,0 +1,65 @@
+Unsigned int G711ALawEncode(int nLeft,int nRight);
+{
+unsigned char cL,cR;
+Unsigned int uWork;
+
+cL =IntToLaw(nLeft);
+cR =IntToLaw(nRight);
+uWork=cL;uWork<<=8;uWork|=cR;
+Return(uWork);
+}
+
+Unsigned char IntToALaw(int nInput)
+{
+int segment;
+    unsigned int i,sign,quant;
+    Unsigned int absol,temp;
+    Int nOutput;
+    Unsigned char cOutput;
+
+Temp=absol=abs(nInput);
+Sign=(nInput>=0)?1:0;
+For(i=0;i<12;i++)
+{
+   nOutput=temp&0x8000;
+   If(nOutput)break;
+   Temp<<=1;
+}
+If(i>=12)nOutput=0;
+Else
+{
+  Segment=11-i;
+  Quant=(absol>>segment)&0xOF;
+  Segment-=4;
+If(segment<=0)segment=0;
+Else segment<<=4;
+nOutput=segment+quant;
+}
+If(sign)
+{
+  nOutput^=0xD5;
+Else
+  nOutput^=0x55;
+cOutput=(unsigned char)nOutput;
+Return cOutput;
+}
+Int ALawToInt(unsigned char nInput);
+{
+  Int sign,segment;
+Int temp,quant,nOutput;
+  
+  Temp=nInput^=0xD5;
+  Sign=(temp&0x80)>>7;
+  Segment=temp&0x70;segment>>=4;segment+=4;
+Quant=temp&0xOF;quant+=0x10;
+If(segment>0) quant<<=segment;
+If(sign)
+    nOuyput=-quant;
+Else
+    nOutput=quant;
+Return nOutput;
+}
+
+
+
+ 

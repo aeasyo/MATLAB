@@ -1,0 +1,267 @@
+原图
+
+I=imread('D:\MATLAB\lena.jpg');
+
+axes(handles.axes1);
+
+imshow(I);
+
+handles.img=I;
+
+guidata(hObject,handles);
+
+转换为灰度图像
+
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+axes(handles.axes7);
+
+imshow(I);
+
+handles.img=I;
+
+guidata(hObject,handles);
+
+添加椒盐噪声
+
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fn=imnoise( I,'salt & pepper',0.2);
+
+axes(handles.axes2);
+
+imshow(fn);
+
+handles.img=fn;
+
+guidata(hObject,handles);
+
+用5*5模板进行中值滤波，边界用0扩充
+
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fn=imnoise( I,'salt & pepper',0.2); 
+
+gn1=medfilt2(fn,[5 5]);//边界用0扩充
+
+axes(handles.axes3);
+
+imshow(gn1);
+
+handles.img=gn1;
+
+guidata(hObject,handles);
+
+用5*5模板进行中值滤波，边界用领域扩充
+
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fn=imnoise( I,'salt & pepper',0.2);
+
+gn2=medfilt2(fn,[5 5],'indexed');//边界用领域扩充
+
+'indexed', 'zeros', 'symmetric'
+
+axes(handles.axes4);
+
+imshow(gn2);
+
+handles.img=gn2;
+
+guidata(hObject,handles);
+
+
+用5*5模板进行均值滤波，边界用0扩充
+
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fn=imnoise( I,'salt & pepper',0.2);
+
+w=fspecial('average',[5 5]);
+
+gm1=imfilter(fn,w); //边界用0扩充
+
+axes(handles.axes5);
+
+imshow(gm1);
+
+handles.img=gm1;
+
+guidata(hObject,handles);
+
+
+用5*5模板进行均值滤波，边界用领域扩充
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fn=imnoise( I,'salt & pepper',0.2);
+
+w=fspecial('average',[5 5]);
+
+gm2=imfilter(fn,w,'replicate'); //边界用邻域扩充
+
+'replicate', 'symmetric', 'circular', 'conv', 'corr', 'full', 'same'
+
+axes(handles.axes6);
+
+imshow(gm2);
+
+handles.img=gm2;
+
+guidata(hObject,handles);
+
+添加高斯噪声
+
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fm=imnoise( I,'gaussian',0,0.02);//添加高斯噪声
+
+axes(handles.axes8);
+
+imshow(fm);
+
+handles.img=fm
+
+guidata(hObject,handles);
+
+用5*5模板进行中值滤波，边界用0扩充
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fn=imnoise(I,'gaussian',0,0.02); 
+
+fm1=medfilt2(fn,[5 5]);//边界用0扩充
+
+axes(handles.axes9);
+
+imshow(fm1);
+
+handles.img=fm1;
+
+guidata(hObject,handles);
+
+用5*5模板进行中值滤波，边界用领域扩充
+
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fn=imnoise(I,'gaussian',0,0.02); 
+
+fm2=medfilt2(fn,[5 5],'indexed');//边界用领域扩充
+
+//'indexed', 'zeros', 'symmetric'
+
+axes(handles.axes10);
+
+imshow(fm2);
+
+handles.img=fm2;
+
+guidata(hObject,handles);
+
+用5*5模板进行均值滤波，边界用0扩充
+
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fn=imnoise( I,'gaussian',0,0.02);
+
+w=fspecial('average',[5 5]);
+
+fn1=imfilter(fn,w); //边界用0扩充
+
+axes(handles.axes11);
+
+imshow(fn1);
+
+handles.img=fn1;
+
+guidata(hObject,handles);
+
+用5*5模板进行均值滤波，边界用领域扩充
+
+I=imread('D:\MATLAB\lena.jpg');
+
+I=rgb2gray(I);
+
+fn=imnoise( I,'gaussian',0,0.02);
+
+w=fspecial('average',[5 5]);
+
+fn2=imfilter(fn,w,'replicate'); //边界用领域扩充
+
+//'replicate', 'symmetric', 'circular', 'conv', 'corr', 'full', 'same'
+
+axes(handles.axes12);
+
+imshow(fn2);
+
+handles.img=fn2;
+
+guidata(hObject,handles);
+
+
+//注释：
+中值滤波的用领域扩充中有以下参数：
+'indexed', 'zeros', 'symmetric'
+不添加参数的情况下，默认是'zeros'
+均值滤波的用领域扩充中有以下参数：
+'replicate', 'symmetric', 'circular', 'conv', 'corr', 'full', 'same'
+不添加参数的情况下，默认参数是'zeros'
+
+//定义函数
+
+function [a, h, boundary, sameSize, convMode] = parse_inputs(a, h, varargin)
+
+narginchk(2,5);
+
+validateattributes(a,{'numeric' 'logical'},{'nonsparse'},mfilename,'A',1);
+validateattributes(h,{'double'},{'nonsparse'},mfilename,'H',2);
+
+%Assign defaults
+boundary = 0;  %Scalar value of zero
+output = 'same';
+do_fcn = 'corr';
+
+allStrings = {'replicate', 'symmetric', 'circular', 'conv', 'corr', ...
+              'full','same'};
+
+for k = 1:length(varargin)
+  if ischar(varargin{k})
+    string = validatestring(varargin{k}, allStrings,...
+                          mfilename, 'OPTION',k+2);
+    switch string
+     case {'replicate', 'symmetric', 'circular'}
+      boundary = string;
+     case {'full','same'}
+      output = string;
+     case {'conv','corr'}
+      do_fcn = string;
+    end
+  else
+    validateattributes(varargin{k},{'numeric'},{'nonsparse'},mfilename,'OPTION',k+2);
+    boundary = varargin{k};
+  end %else
+end
+
+sameSize = strcmp(output,'same');
+
+convMode = strcmp(do_fcn,'conv');
+
+

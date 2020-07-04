@@ -1,0 +1,107 @@
+原图
+
+I= imread('liftingbody.png' );      
+
+axes(handles.axes1);
+
+imshow(I);
+
+handles.img=I;
+
+guidata(hObject,handles);
+
+添加高斯噪声
+
+I= imread('liftingbody.png' );      
+
+noisy = imnoise(I, 'gaussian',0.01 );   
+
+axes(handles.axes2);
+
+imshow(noisy);
+
+handles.img=noisy;
+
+guidata(hObject,handles);
+
+巴特沃斯高通滤波器
+
+I= imread('liftingbody.png' );      
+
+noisy = imnoise(I, 'gaussian',0.01 );   
+
+[M N] =size(I);   
+
+F=fft2(noisy);       //进行二维快速傅立叶变换
+
+fftshift(F);            //把快速傅立叶变换的DC组件移到光谱中心
+
+Dcut=100;           //截止频率是100,D0
+
+for u=1:M
+
+     for v=1:N
+
+  D(u,v) =sqrt(u^2 + v^2);
+
+//巴特沃斯高通传递函数
+
+    BUTTERH(u, v)=1/{1+[sqrt(2)-1][Dcut/D(u,v)]^2n};  
+
+     end
+
+end
+
+BUTTERG=BUTTERH.*F;
+
+BUTTERfiltered=ifft2(BUTTERG);
+
+axes(handles.axes3);
+
+imshow(BUTTERfiltered);
+
+handles.img=BUTTERfiltered;
+
+guidata(hObject,handles);
+
+巴特沃斯低通滤波器
+
+I= imread('liftingbody.png' );      
+
+noisy = imnoise(I, 'gaussian',0.01 );   
+
+[M N] =size(I);   
+
+F=fft2(noisy);       //进行二维快速傅立叶变换
+
+fftshift(F);            //把快速傅立叶变换的DC组件移到光谱中心
+
+Dcut=100;
+
+n=6;
+
+for u=1:M
+
+     for v=1:N
+
+  D(u,v) =sqrt(u^2 + v^2);
+
+//巴特沃斯低通传递函数
+
+    BUTTERL(u, v)=1/(1+((Dcut/ D(u,v))^2n));  
+
+     end
+
+end
+
+BUTTERG1=BUTTERL.*F;
+
+BUTTERfiltered1=ifft2(BUTTERG1)
+
+axes(handles.axes4);
+
+imshow(BUTTERfiltered1);
+
+handles.img=BUTTERfiltered1;
+
+guidata(hObject,handles);

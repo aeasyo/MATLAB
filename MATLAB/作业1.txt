@@ -1,0 +1,170 @@
+缩小图像 k1,k2<0
+I=imread('cameraman.tif');
+[m,n]=size(I);
+k1=0.6;
+k2=0.4;
+M=round(m*k1);
+N=round(n*k2);
+for i=1:M
+   for j=1:N
+        x=round(i/k1);
+        if x>m x=m;end
+        y=round(j/k2);
+        if y>n y=n;end
+       G(i,j) = I(x,y);
+    end
+end
+figure(1);
+subplot(121);
+imshow(I);
+subplot(121);
+imshow(G);
+
+水平错切
+I=imread('D:\MATLAB\beauty.jpg');
+
+[fheight,fwidth]=size(I);
+
+tform=maketform('affine',[1 0 0;tan(pi/4) 1 0;0 0 1]);
+
+J3=imtransform(I,tform);
+
+imshow(J3);
+
+
+
+读取原图
+I=imread('D:\MATLAB\beauty.jpg');
+
+axes(handles.axes1);
+
+imshow(I);
+
+handles.img=I;
+
+guidata(hObject,handles);
+
+
+水平镜像
+I=imread('D:\MATLAB\beauty.jpg');
+
+[fheight,fwidth]=size(I);
+
+tform1=maketform('affine',[-1 0 0;0 1 0;fheight 0 1]);
+
+I1=imtransform(I,tform1);
+
+axes(handles.axes2);
+
+imshow(I1);
+
+handles.img=I1;
+
+guidata(hObject,handles);
+
+垂直镜像
+I=imread('D:\MATLAB\beauty.jpg');
+
+[fheight,fwidth]=size(I);
+
+tform2=maketform('affine',[1 0 0;0 -1 0;0 fwidth  1]);
+
+I2=imtransform(I,tform2);
+
+axes(handles.axes3);
+
+imshow(I2);
+
+handles.img=I2;
+
+guidata(hObject,handles);
+
+水平错切
+I=imread('D:\MATLAB\beauty.jpg');
+
+h=size(I);
+
+f1=zeros(h(1)+round(h(2)*tan(pi/6)),h(2),h(3),'uint8');
+
+for m=1:h(1);
+
+    for n=1:h(2);
+
+        f1(m+round(n*tan(pi/6)),n,1:h(3))=I(m,n,1:h(3));
+
+    end
+
+end
+
+axes(handles.axes4);
+
+imshow(uint(f1));
+
+handles.img=uint(f1);
+
+guidata(hObject,handles);
+
+
+垂直错切
+h=size(I);
+
+f2=zeros(h(1),h(2)+round(h(2)*tan(pi/4)),h(3)); 
+
+for m=1:h(1)     
+
+    for n=1:h(2)          
+
+        f2(m,n+round(m*tan(pi/4)),1:h(3))=I(m,n,1:h(3));     
+
+    end
+
+end
+
+axes(handles.axes5);
+
+imshow(uint(f2));
+
+handles.img=uint(f2);
+
+guidata(hObject,handles);
+
+
+原始图像
+I = imread('cameraman.tif');
+
+axes(handles.axes1);
+
+imshow(I);
+
+handles.img=I;
+
+guidata(hObject,handles);
+
+平移后的图像
+I= imread('cameraman.tif');
+
+se = translate(strel(1), [25 25]);
+
+J = imdilate(I,se);
+
+axes(handles.axes2);
+
+imshow(J);
+
+handles.img=J;
+
+guidata(hObject,handles);
+旋转后的图像
+I=imread('cameraman.tif');
+
+I=mat2gray(I);
+
+J1=imrotate(I,-15,'bilinear','crop')；
+
+axes(handles.axes3);
+
+imshow(J1);
+
+handles.img=J1;
+
+guidata(hObject,handles);
